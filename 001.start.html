@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <!--取值表达式 可以做一些简单的赋值操作 显示数据 可以做三元表达式-->
+    {{msg=='hello world'?'yes':'no'}}
+    <!--双向数据绑定 指代的是input标签 textarea-->
+    <!--v-model的作用 第一会将内容绑定到视图上，当输入框内容改变时会影响数据的变化-->
+    <input type="text" v-model="msg">
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<!--默认引入vue 会提供一个Vue的构造函数-->
+<script>
+    // 需要dom  数据 view视图 model计划好的对象
+    //vm 代表的就是viewModel,vm会代理data数据
+    //指令 行间属性，执行一些特定的功能,vue要求指令名字必须以v-开头
+    let vm = new Vue({
+        el: '#app', //使用querySelector
+        data:{
+            msg:'hello world'
+        }
+    })
+</script>
+</body>
+</html>

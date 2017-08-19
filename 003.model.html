@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    {{msg.name}} {{msg.age}}
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script>
+    //1.数据必须先声明才能使用
+    //2.如果是对象类型没有初始化数据 是不能数据变化-> 视图变化
+    //   想改变 可以通过赋予新对象 vm.msg = {name:'zfpx',age:1}
+    //   vm.$set(vm.msg,'age',100)  添加新属性数据
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            msg:{name:'zfpx'}
+        }
+    })
+</script>
+</body>
+</html>

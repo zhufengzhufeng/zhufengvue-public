@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<div id="app">
+    <!--v-for是一个比较常用的指令，要循环谁 就把 v-for写在谁的身上-->
+   <!-- <ul>
+        in 或者 of均可
+        <li v-for="(fruit,index) in fruits">{{index}}{{fruit}}</li>
+    </ul>-->
+    <!--<ul>-->
+        <!--<li v-for="fruit in fruits">-->
+            <!--{{fruit.name}}-->
+           <!--<ul>-->
+                <!--<li v-for="(t,index) in fruit.type">{{index}}{{t}}</li>-->
+            <!--</ul>-->
+
+        <!--</li>-->
+    <!--</ul>-->
+    <ul>
+        <li v-for="(val,aa) in waterMon">{{aa}}{{val}}</li>
+    </ul>
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script>
+    //forEach((item,index)=>{})
+    // forEach for  for of
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            fruits:[{name:'香蕉',type:['绿色','黄色']},{name:'香蕉',type:['绿色','黄色']}],
+            waterMon:{sweet:'甜的',color:'红的'}
+        }
+    });
+</script>
+</body>
+</html>
