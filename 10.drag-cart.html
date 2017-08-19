@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.css">
+    <style>
+        .cart{
+            width: 50px;
+            height: 50px;
+            background: orangered ;
+            text-align: center;
+            font-size: 20px;
+            position: fixed;
+            top: 400px;
+            right: 0;
+        }
+        .cart i{
+            color:#fff
+        }
+        .cart span{
+            display: block;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">珠峰购物车</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="col-md-3 text-center" @dragstart="start($event,index)" draggable="true" v-for="(product,index) in products">
+            <div class="panel panel-primary">
+                <div class="panel-heading">{{product.productName}}</div>
+                <div class="panel-body">
+                    <img :src="product.productCover" width="130px" height="140px" ref="img">
+                </div>
+                <div class="panel-footer">
+                    价格 {{product.productPrice}}
+                </div>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <tr>
+                <th><input type="checkbox" v-model="checkall"> 全选</th>
+                <th>商品名称</th>
+                <th>商品价格</th>
+                <th>商品数量</th>
+                <th>小计</th>
+                <th>操作</th>
+            </tr>
+            <tr v-for="cart in carts">
+                <td><input type="checkbox" v-model="cart.isSelected"></td>
+                <td>{{cart.productName}}</td>
+                <td>{{cart.productPrice}}</td>
+                <td><input type="text" v-model="cart.productCount"></td>
+                <td>{{cart.productPrice*cart.productCount}}</td>
+                <td><button @click="remove(cart)">删除</button></td>
+            </tr>
+            <tr>
+                <td colspan="6">
+                    总价 {{sum | toInt}}
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="cart" @drop="drop" @dragover.prevent>
+        <i class="glyphicon glyphicon-shopping-cart"></i>
+        <span>{{count}}</span>
+    </div>
+
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script src="node_modules/axios/dist/axios.js"></script>
+<script>
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            products:[],
+            current:'',//当前拖动的是哪个元素
+            carts:JSON.parse(localStorage.getItem('cartList')) || [],
+        },
+        watch:{
+            carts:{
+                handler(){ //能监控到一层的变化 不会监控数组中的某一个对象 我们需要深度监控
+                    alert(1);
+                    localStorage.setItem('cartList',JSON.stringify(this.carts));
+                },
+                deep:true
+            }
+        },
+        filters:{
+            toInt(input){ // input = sum
+                return input.toFixed(2)
+            }
+        },
+        computed:{
+            count(){
+                return this.carts.reduce((prev,next)=>{
+                  return prev+parseInt(next.productCount);
+                },0)
+            },
+            checkall:{
+              get(){ //如果products中有一个元素isSelected是false  checkall则为false
+                  //如果其中有一个返回为false 结果就是false
+                    return this.carts.every(item=>item.isSelected)
+              },
+                set(val){
+                    this.carts.forEach(item=>item.isSelected = val)
+                }
+            },
+            sum(){
+                return this.carts.reduce((prev,next)=>{ //es5
+                    if(next.isSelected){
+                        return prev+next.productCount*next.productPrice
+                    }else{
+                        return prev;
+                    }
+                },0);
+            }
+        },
+        methods:{
+            remove(cart){ //filter过滤 如果返回true 表示留下并且放到一个新的数组里
+               this.carts =  this.carts.filter(item=>item!=cart);//es5
+            },
+          start(e,index){ //e.dataTransfer.setDragImg
+              //ref  this.$refs.img
+              // 低版本浏览器不识别 chrome 需要60+
+              let product =  {...this.products[index],productCount:1,isSelected:true} ;
+              this.current = product; //保存当前拖动的那个元素
+              e.dataTransfer.setDragImage(this.$refs.img[index],0,0)
+          },
+          drop(){
+              //如果当前购物车中 有 则累加数量即可 this.current.id == this.carts其中一项如果相等
+              if(this.carts.some(item=>item.id == this.current.id)){
+                  this.carts.forEach(item=>{
+                      if(item.id ==this.current.id ){
+                          item.productCount++;
+                      }
+                  });
+              }else{
+                  this.carts.push(this.current);
+              }
+
+          }
+        },
+        created(){ //created中的this 也是vm
+            //箭头函数中没有this指向
+            axios.get('./products.json').then(res=>{
+              this.products = res.data;
+            })
+        }
+    });
+</script>
+</body>
+</html>
