@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<div id="app">
+    <button @click="heart='丑的'">变丑</button>
+    <button @click="heart='碎了'">心碎</button>
+    {{heart}}
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script>
+    //1.computed 不能写异步逻辑
+    //2.watch用起来比computed 简单，某个数据变化了就执行一件事
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            heart:'美的'
+        },
+        watch:{ //监控 只要某个值发生变化 就执行某个函数
+            heart(){
+                setTimeout(()=>{
+                    alert('啊 你变了')
+                },3000);
+            }
+        },
+        //created中一般会调用ajax请求
+        created(){ //实例创建后执行  声明周期的常用的两个方法
+            alert('实例创建')
+        },
+        mounted(){ //当数据渲染页面完成后执行
+            alert('挂载后');//获取真实dom
+        }
+        //computed是根据值计算出来的
+        //watch是监控某个值的变化
+        //method是纯事件调用
+        //钩子函数 声明周期 自己提供的函数
+    });
+</script>
+</body>
+</html>

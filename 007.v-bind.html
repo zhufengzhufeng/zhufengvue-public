@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <style>
+        .back{background: red}
+    </style>
+</head>
+<body>
+<div id="app">
+    <!--如果在标签内 绑定动态变量 需要v-bind可简写成：-->
+    <!--绑定动态数据使用冒号 后面写变量名-->
+    <!--style class-->
+    <div :title="title">姜文</div>
+    <img src="http://www.zhufengpeixun.cn/themes/jianmo2/images/react.png" alt="" :width="w">
+    <!--style可以通过 ：绑定对象格式的样式,还可以支持我们的数组格式，数组中的样式都会生效 class和style的用法一致-->
+    <div :style="[s,c]">
+        react mm
+    </div>
+    <!--class类名 绑定的是对象格式 如果是true则生效,也支持数组的写法-->
+    <div :class="[{back:true}]">ok</div>
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script>
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            s:{background:'greenyellow'},
+            c:{color:'red'},
+            title:'我很英俊',
+            w:'100px'
+        }
+    });
+</script>
+</body>
+</html>

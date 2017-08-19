@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<div id="app">
+    <div @click="grandparent">
+            grandparent
+        <div @click.self="parent">
+            parent
+            <div @click="child">child</div>
+        </div>
+    </div>1
+    <a href="http://www.zhufengpeixun.cn" @click.prevent="child">去珠峰</a>
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<!--事件冒泡 事件捕获 .self .stop .capture .prevent .键盘码 right left space esc-->
+<script>
+    let vm = new Vue({
+        el:'#app',
+        methods:{
+            grandparent(){
+                alert('grandparent')
+            },
+            parent(){
+                alert('parent')
+            },
+            child(){
+                alert('child')
+            }
+        }
+    });
+</script>
+</body>
+</html>

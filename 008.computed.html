@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+<div id="app">
+    <input type="text" v-model="product.name"><br>
+    {{product.price}} <br>
+    <input type="text" v-model="product.count"><br>
+    <!--{{sum()}} 说明语法是错误的-->
+    {{sum}}
+</div>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script>
+    let vm = new Vue({
+        el:'#app',
+        data:{
+            product:{
+                name:'飞机',
+                price:200,
+                count:1
+            }
+        }, //计算属性 根据其他属性计算而来的 虽然是属性但是要写成函数
+        computed:{ //get 和set  默认调用的是get方法
+            sum:{
+                get(){ //获取
+                    return  this.product.price*this.product.count
+                }
+            }
+        },
+        /*methods:{ //指代的是函数 click mouseover
+            sum(){
+                alert(1);
+                return this.product.price*this.product.count
+            }
+        }*/
+    });
+</script>
+</body>
+</html>
